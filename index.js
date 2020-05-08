@@ -37,6 +37,13 @@ function action() {
         ]
       }
     ])}
+    // if view all employees, display all employee data 
+    // if view all employees by department
+    // -- prompt department selection
+    // if view all employees by manager
+    // -- display manager list
+    // if add
+
     //.then(qry_text =>{
     //    console.log(qry_text);
     //    con.query(qry_text,function(err,result){
