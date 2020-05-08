@@ -16,27 +16,32 @@ con.connect(function(err){
     //successful connection
     //this won't run if you have an error
     console.log("success!");
+    let queryTxt = "select from employees"
+    con.query(queryTxt, function(error, result) {
+        //console logs result (dont actually have data yet)
+        console.log(result)
+    });
     action();
 });
 ​
 ​
 function action() {
-    inquirer.prompt([
-        {
-            type: "list",
-            name: "action",
-            message: "What would you like to do?",
-            choices: [
-                "View all employees",
-                "View all employees by department",
-                "View all employees by manager",
-                "Add Employee",
-                "Remove employee",
-                "Update employee role",
+//    inquirer.prompt([
+//        {
+//            type: "list",
+//            name: "action",
+//            message: "What would you like to do?",
+//            choices: [
+//                "View all employees",
+//                "View all employees by department",
+//                "View all employees by manager",
+//                "Add Employee",
+//                "Remove employee",
+//                "Update employee role",
                 //"Update manager role"
-            ]
-        }
-    ])}
+//            ]
+//        }
+//    ])}
     // if view all employees, display all employee data 
     // if view all employees by department
     // -- prompt department selection
@@ -50,4 +55,4 @@ function action() {
     //        console.log(result);
     //    })
     //    con.end();
-    //}
+}
