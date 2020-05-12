@@ -87,7 +87,7 @@ function viewDepartment() {
 
 function viewMangers() {
     con.query(
-        "SELECT `first_name`, `last_name`, `title` as 'manager' WHERE FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
+        "SELECT `first_name`, `last_name` FROM employeesdb.employee WHERE manager_id IS NOT NULL;",
         function(error, result, fields) {
             console.table(result)
         }
@@ -116,20 +116,33 @@ function addEmployees() {
             name: "manager",
             message: "what is your manager's Id?"
         }
-    ]).then((firstName,lastName,role,manager) => {
-        con.query(
-            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${firstName},${lastName},${role},${manager});`,
-            function(error, result, fields) {
-                console.log(result)
-            }
-        )
+    ]).then((answer) => {
+        console.log(answer.firstName);
+            con.query(
+            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answer.firstName}","${answer.lastName}",${answer.role},${answer.manager});`,
+            function(error, result, answer) {
+                if (error) throw error;
+                console.table(`${answer.firstName} ${answer.lastName} employee inserted`);
+            })
     })
 }
 
 function removeEmployees() {
-    
+    con.query(
+        "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id)",
+        function(error, result, fields) {
+            console.log(result)
+        }
+    );
 }
 
 function UpdateEmployees() {
-    
+    con.query(
+        "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
+        //UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'
+        //"UPDATE employee SET first_name = '*******' WHERE first_name = '*******' ",
+        function(error, result, fields) {
+            console.log(result)
+        }
+    );
 }
