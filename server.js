@@ -142,9 +142,23 @@ function UpdateEmployees() {
         function(error, result, fields) {
             for (let i = 0; i < result.length; i++) {
                 let e = result[i];
-                console.log(e.first_name)
+                let employeeList = e.first_name + " " + e.last_name
+                console.log(employeeList)
             }
-        }
+        },
+
+        //console.log(employeeList),
+
+        // inquirer.prompt([
+        //     {
+        //         type: "list",
+        //         name: "action",
+        //         message: "Which employee would you like to edit?",
+        //         choices: [
+        //             employeeList
+        //         ]
+        //     }
+        // ])
     );
     //UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'
     //"UPDATE employee SET first_name = '*******' WHERE first_name = '*******' ",
