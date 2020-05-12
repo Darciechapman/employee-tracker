@@ -139,10 +139,13 @@ function removeEmployees() {
 function UpdateEmployees() {
     con.query(
         "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
-        //UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'
-        //"UPDATE employee SET first_name = '*******' WHERE first_name = '*******' ",
         function(error, result, fields) {
-            console.log(result)
+            for (let i = 0; i < result.length; i++) {
+                let e = result[i];
+                console.log(e.first_name)
+            }
         }
     );
+    //UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'
+    //"UPDATE employee SET first_name = '*******' WHERE first_name = '*******' ",
 }
