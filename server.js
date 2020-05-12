@@ -57,22 +57,16 @@ function action() {
         } else if (action === "Remove employee") {
             removeEmployees()
         } else {
-            UpdateEmployees()
+            updateEmployees()
         }
     });
-    // if view all employees, display all employee data 
-    // if view all employees by department
-    // -- prompt department selection
-    // if view all employees by manager
-    // -- display manager list
-    // if add
 
 }
 
 function viewEmployees() {
     con.query(
         "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
-        function(error, result, fields) {
+        function(error, result) {
             console.table(result)
         });
 }
@@ -80,7 +74,7 @@ function viewEmployees() {
 function viewDepartment() {
     con.query(
         "SELECT `title` as 'department' FROM employeesdb.department;",
-        function(error, result, fields) {
+        function(error, result) {
             console.table(result)
         });
 }
@@ -88,7 +82,7 @@ function viewDepartment() {
 function viewMangers() {
     con.query(
         "SELECT `first_name`, `last_name` FROM employeesdb.employee WHERE manager_id IS NOT NULL;",
-        function(error, result, fields) {
+        function(error, result) {
             console.table(result)
         }
     );
@@ -129,37 +123,78 @@ function addEmployees() {
 
 function removeEmployees() {
     con.query(
-        "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id)",
-        function(error, result, fields) {
-            console.log(result)
-        }
-    );
-}
-
-function UpdateEmployees() {
-    con.query(
-        "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
-        function(error, result, fields) {
+        "SELECT `first_name`, `last_name` FROM employeesdb.employee;",
+        function(error, result) {
+            const employeeOptions = [];
             for (let i = 0; i < result.length; i++) {
-                let e = result[i];
-                let employeeList = e.first_name + " " + e.last_name
-                console.log(employeeList)
+                console.log(result[i].title);
+                employeeOptions.push(results[i].first_name + " " + results[i].last_name)
             }
-        },
 
-        //console.log(employeeList),
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "employee",
+                    message: "Which emplyee would you like to delete?",
+                    choices: employeeOptions
+                }
 
-        // inquirer.prompt([
-        //     {
-        //         type: "list",
-        //         name: "action",
-        //         message: "Which employee would you like to edit?",
-        //         choices: [
-        //             employeeList
-        //         ]
-        //     }
-        // ])
-    );
-    //UPDATE customers SET address = 'Canyon 123' WHERE address = 'Valley 345'
-    //"UPDATE employee SET first_name = '*******' WHERE first_name = '*******' ",
+            ]).then(({ deleteEmployee }) => {
+                console.log(deleteEmployee)
+                const updateQueryString = `DELETE FROM customers WHERE firstname = {} lastname = {};`
+
+                con.query(
+                    updateQueryString,
+                    function(error, result) {
+                        //console.log(error)
+                        console.log(deleteEmployee + " has been deleted");
+                    }
+                );
+            });
+
+        }
+    )
+}
+//var sql = "DELETE FROM customers WHERE address = 'Mountain 21'";
+
+function updateEmployees() {
+    con.query(
+        "SELECT `title` FROM employeesdb.roles;",
+        function(error, result) {
+            const roleOptions = [];
+            for (let i = 0; i < result.length; i++) {
+                console.log(result[i].title);
+                roleOptions.push(result[i].title)
+            }
+
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "role",
+                    message: "Which role do you want to edit?",
+                    choices: roleOptions
+                }
+            ]).then(({ role }) => {
+
+                inquirer.prompt([
+                    {
+                        type: "number",
+                        name: "newRoleSalary",
+                        message: "what is the new salary for " + role,
+                    }
+                ]).then(({ newRoleSalary }) => {
+                    const updateQueryString = `UPDATE roles SET salary = ${newRoleSalary} WHERE title = '${role}';`
+
+                    con.query(
+                        updateQueryString,
+                        function(error, result) {
+                            //console.log(error)
+                            console.log(role + " has been updated");
+                        }
+                    );
+                });
+
+            });
+        }
+    )
 }
