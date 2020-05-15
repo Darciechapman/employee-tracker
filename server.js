@@ -22,8 +22,7 @@ con.connect(function(err){
 
 con.query(
     "SELECT `first_name`, `last_name`, `title` as 'role' FROM employeesdb.employee inner join employeesdb.roles on(employee.role_id = roles.id);",
-    function(error, result, fields) {
-    //console logs data (dont actually have data yet)
+    function(error, result) {
     console.table(result)
     action()
 });
@@ -54,8 +53,8 @@ function action() {
             viewMangers()
         } else if (action === "Add Employee") {
             addEmployees()
-        } else if (action === "Remove employee") {
-            removeEmployees()
+        // } else if (action === "Remove employee") {
+        //     removeEmployees()
         } else {
             updateEmployees()
         }
@@ -121,40 +120,40 @@ function addEmployees() {
     })
 }
 
-function removeEmployees() {
-    con.query(
-        "SELECT `first_name`, `last_name` FROM employeesdb.employee;",
-        function(error, result) {
-            const employeeOptions = [];
-            for (let i = 0; i < result.length; i++) {
-                console.log(result[i].title);
-                employeeOptions.push(results[i].first_name + " " + results[i].last_name)
-            }
+// function removeEmployees() {
+//     con.query(
+//         "SELECT `first_name`, `last_name` FROM employeesdb.employee;",
+//         function(error, result) {
+//             const employeeOptions = [];
+//             for (let i = 0; i < result.length; i++) {
+//                 console.log(result[i].title);
+//                 employeeOptions.push(results[i].first_name + " " + results[i].last_name)
+//             }
 
-            inquirer.prompt([
-                {
-                    type: "list",
-                    name: "employee",
-                    message: "Which emplyee would you like to delete?",
-                    choices: employeeOptions
-                }
+//             inquirer.prompt([
+//                 {
+//                     type: "list",
+//                     name: "employee",
+//                     message: "Which emplyee would you like to delete?",
+//                     choices: employeeOptions
+//                 }
 
-            ]).then(({ deleteEmployee }) => {
-                console.log(deleteEmployee)
-                const updateQueryString = `DELETE FROM customers WHERE firstname = {} lastname = {};`
+//             ]).then(({ deleteEmployee }) => {
+//                 console.log(deleteEmployee)
+//                 const updateQueryString = `DELETE FROM customers WHERE firstname = {} lastname = {};`
 
-                con.query(
-                    updateQueryString,
-                    function(error, result) {
-                        //console.log(error)
-                        console.log(deleteEmployee + " has been deleted");
-                    }
-                );
-            });
+//                 con.query(
+//                     updateQueryString,
+//                     function(error, result) {
+//                         //console.log(error)
+//                         console.log(deleteEmployee + " has been deleted");
+//                     }
+//                 );
+//             });
 
-        }
-    )
-}
+//         }
+//     )
+// }
 //var sql = "DELETE FROM customers WHERE address = 'Mountain 21'";
 
 function updateEmployees() {
